@@ -1,0 +1,40 @@
+services:
+  postgres:
+    container_name: postgres-vehicle-db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: DENNIS
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: vehicleRentalManagementDB
+    volumes:
+      - postgres:/data/postgres
+    ports:
+        - "1090:5432"
+
+    networks:
+      - springboot-app
+    restart: unless-stopped
+
+  vehicle:
+    container_name: vehicle-api
+    image: vehiclerental:1.0.0
+    ports:
+      - "8300:8000"
+    networks:
+     - springboot-app
+    depends_on:
+      - postgres
+
+
+
+networks:
+  springboot-app:
+    driver: bridge
+volumes:
+  postgres:
+    driver: local
+
+
+
+
