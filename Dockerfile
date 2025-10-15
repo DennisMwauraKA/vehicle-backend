@@ -68,4 +68,4 @@ ENV DB_URL=jdbc:postgresql://postgres-vehicle-db:5432/vehicleRentalManagementDB
 ENV ACTIVE_PROFILE=$PROFILE
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL} -Dserver.port=${PORT} app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL} -Dserver.port=${PORT} -jar app.jar"]
