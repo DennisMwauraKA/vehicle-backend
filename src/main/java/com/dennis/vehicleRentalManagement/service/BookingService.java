@@ -32,16 +32,16 @@ public class BookingService {
         this.vehicleRepository = vehicleRepository;
         this.bookingMapper = bookingMapper;
     }
-// book a vehicle
+
+    // book a vehicle
     public Integer bookVehicle(Authentication connectedUser, BookVehicleRequest bookVehicleRequest) {
 //check if vehicle exists
 
-        Vehicle vehicle = vehicleRepository.findById(bookVehicleRequest.getVehicleId()).orElseThrow(() -> new EntityNotFoundException("No vehicle found"));
-
+        Vehicle vehicle = vehicleRepository.findByModel(bookVehicleRequest.getModel()).orElseThrow(() -> new EntityNotFoundException("No vehicle model found"));
         // get the connected user
 
         User user = (User) connectedUser.getPrincipal();
-        if(!user.getRole().equals(Role.ADMIN) &&!user.getId().equals(user.getId())){
+        if (!user.getRole().equals(Role.ADMIN) && !user.getId().equals(user.getId())) {
 
             throw new RuntimeException("you cannot book a vehicle for another user");
         }
@@ -57,7 +57,7 @@ public class BookingService {
 
         // check the availability of the vehicle
         boolean isAvailable = bookingRepository.findDateAvailability(
-                bookVehicleRequest.getVehicleId(),
+                bookVehicleRequest.getModel(),
                 bookVehicleRequest.getStartDate(),
                 bookVehicleRequest.getEndDate()
         ).isEmpty();
@@ -78,10 +78,11 @@ public class BookingService {
                 .totalCost(totalCost)
                 .build();
 
-         bookingRepository.save(booking);
-         return booking.getId();
+        bookingRepository.save(booking);
+        return booking.getId();
     }
- // cancel Vehicle booking
+
+    // cancel Vehicle booking
     public Integer cancelBooking(Integer bookingId, Authentication connectedUser) {
         // find id booking exists in the DB
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new EntityNotFoundException("No bookings found"));
@@ -89,7 +90,7 @@ public class BookingService {
         // get connected user
         User user = (User) connectedUser.getPrincipal();
         // make sure a user deletes their own booking
-        if(!user.getRole().equals(Role.ADMIN) &&!user.getId().equals(user.getId())){
+        if (!user.getRole().equals(Role.ADMIN) && !user.getId().equals(user.getId())) {
 
             throw new RuntimeException("you cannot cancel a vehicle booking for another user");
         }
@@ -98,7 +99,7 @@ public class BookingService {
         return bookingId;
     }
 
-// get all bookings done
+    // get all bookings done
     public PageResponse<BookingResponse> viewAllBookings(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Booking> bookings = bookingRepository.findAll(pageable);

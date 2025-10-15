@@ -20,6 +20,8 @@ public enum Role {
             ADMIN_CREATE,
             ADMIN_DELETE
     )),
+
+
 USER(Collections.emptySet());
     ;
 

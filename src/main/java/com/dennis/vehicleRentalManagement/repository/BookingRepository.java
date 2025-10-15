@@ -13,12 +13,12 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
 
-    @Query("SELECT b FROM Booking b WHERE b.vehicle.id = :vehicleId AND " +
+    @Query("SELECT b FROM Booking b WHERE b.vehicle.model = :model AND " +
             "(:startDate BETWEEN b.startDate AND b.endDate OR " +
             ":endDate BETWEEN b.startDate AND b.endDate OR " +
             "(b.startDate BETWEEN :startDate AND :endDate))")
     List<Booking> findDateAvailability(
-            @Param("vehicleId") Integer vehicleId,
+            @Param("model") String model,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate
     );

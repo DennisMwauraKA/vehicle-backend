@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BookVehicleRequest {
     private Integer userId;
-    private Integer vehicleId;
+    private String  model;
     private LocalDate startDate;
     private LocalDate endDate;
 
