@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+admin:
+  password: admin12
+  email: admin@gmail.com
+  firstname: admin
+  lastname: account
+
+
+jwt:
+  secretKey: ${JWT_SECRET_KEY}
+
+
+
+server:
+  port: 8080
+
+
+
