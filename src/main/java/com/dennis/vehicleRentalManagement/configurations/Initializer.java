@@ -1,11 +1,13 @@
 package com.dennis.vehicleRentalManagement.configurations;
+
 import com.dennis.vehicleRentalManagement.authorization.Role;
 import com.dennis.vehicleRentalManagement.entity.User;
 import com.dennis.vehicleRentalManagement.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,12 +28,11 @@ public class Initializer {
     @Value("${admin.lastname}")
     private String adminLastName;
 
-    @PostConstruct
-    public void init() {
+    @EventListener(ApplicationReadyEvent.class)
+    public void createAdminIfMissing() {
         try {
-            // Check if admin exists
-            User adminAccount = userRepository.findByRole(Role.ADMIN);
-            if (adminAccount == null) {
+            User admin = userRepository.findByRole(Role.ADMIN);
+            if (admin == null) {
                 User user = new User();
                 user.setEmail(email);
                 user.setFirstName(adminFirstName);
@@ -41,7 +42,7 @@ public class Initializer {
                 userRepository.save(user);
                 System.out.println(" Admin account created successfully!");
             } else {
-                System.out.println(" Admin account already exists, skipping creation.");
+                System.out.println(" Admin already exists, skipping creation.");
             }
         } catch (Exception e) {
             System.err.println(" Error creating admin account: " + e.getMessage());
