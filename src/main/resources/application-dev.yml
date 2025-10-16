@@ -21,8 +21,7 @@ admin:
 
 
 jwt:
-  secretKey: ${JWT_SECRET_KEY}
-
+  secretKey: ${JWT_SECRET_KEY:defaultSecretKeyHere}
 
 
 server:
